@@ -32,6 +32,7 @@ desugarExp (CApp c1 c2 ) = App ( desugarExp c1) ( desugarExp c2)
 desugarExp ( List l) = foldr (\x -> App (App consExp x)) nilExp (map desugarExp l)
 
 
+
 -- desugarExp ( Nat n ) = X ( desugarVar n)
 
 
