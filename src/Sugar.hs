@@ -30,8 +30,8 @@ desugarExp ( CX x) = X (desugarVar x)
 desugarExp ( CLam v c) = Lam ( desugarVar v) (desugarExp c)
 desugarExp (CApp c1 c2 ) = App ( desugarExp c1) ( desugarExp c2)
 desugarExp ( List l) = foldr (\x -> App (App consExp x)) nilExp (map desugarExp l)
-
-
+desugarExp (Nat n) = if n == 0 then X (IndexedVar "Z" 0) else App (X (IndexedVar "S" 0)) (desugarExp (Nat (n-1)) )
+desugarExp (Let (Var a) b c) = App ( Lam (IndexedVar a 0) (X (makeIndexedVar (desugarExp c)) )) (X  (IndexedVar (desugarExp b) 0))
 
 -- desugarExp ( Nat n ) = X ( desugarVar n)
 
