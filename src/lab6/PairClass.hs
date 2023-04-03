@@ -22,18 +22,18 @@ instance PairClass (,) where
 
 -- | curry converts a functio on pairs to a curried function (of two arguments).
 curry :: (PairClass p) => (p a b -> c) -> a -> b -> c
-curry = undefined
+curry f a b = f( pair a b)
 
 -- | Extract the first component of a pair.
 fst :: (PairClass p) => p a b -> a
-fst = undefined
+fst p = uncurry(\a b -> a) p
 
 -- >>> curry (fst :: (CBool, CMaybe CBool) -> CBool) true (just false)
 -- CTrue
 
 -- | Extract the second component of a pair.
 snd :: (PairClass p) => p a b -> b
-snd = undefined
+snd p = uncurry (\a b -> b) p
 
 -- >>> snd (pair true (just false) :: (CBool, CMaybe CBool))
 -- CJust CFalse

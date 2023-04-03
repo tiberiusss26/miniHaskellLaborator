@@ -28,8 +28,7 @@ instance MaybeClass Maybe.Maybe where
 -- If the 'MaybeClass' is 'nothing', it returns the default value;
 -- otherwise, it returns the value contained in the 'MaybeClass'.
 fromMaybe :: (MaybeClass m) => a -> m a -> a
-fromMaybe = undefined
-
+fromMaybe a ma = maybe
 -- >>> fromMaybe true (just false :: Maybe.Maybe Bool.Bool)
 -- False
 
