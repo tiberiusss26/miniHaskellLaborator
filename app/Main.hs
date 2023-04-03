@@ -22,5 +22,5 @@ main = do
                         Load s -> putStrLn "Not implemented " >> main
                         Eval l -> case parse exprParser "<input>" l of
                             Left err -> print err >> main
-                            Right c -> putStrLn ( showExp c) >> main
+                            -- Right c -> (putStrLn , showExp, sugarExp, normalize, desugarExp $ c) >> main
     

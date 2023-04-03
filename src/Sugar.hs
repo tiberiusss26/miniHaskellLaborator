@@ -31,9 +31,8 @@ desugarExp ( CLam v c) = Lam ( desugarVar v) (desugarExp c)
 desugarExp (CApp c1 c2 ) = App ( desugarExp c1) ( desugarExp c2)
 desugarExp ( List l) = foldr (\x -> App (App consExp x)) nilExp (map desugarExp l)
 desugarExp (Nat n) = if n == 0 then X (IndexedVar "Z" 0) else App (X (IndexedVar "S" 0)) (desugarExp (Nat (n-1)) )
-desugarExp (Let (Var a) b c) = App ( Lam (IndexedVar a 0) (X (makeIndexedVar (desugarExp c)) )) (X  (IndexedVar (desugarExp b) 0))
-
--- desugarExp ( Nat n ) = X ( desugarVar n)
+desugarExp (Let v c1 c2) = App (Lam (desugarVar v) (desugarExp c2) ) (desugarExp c1)
+desugarExp (LetRec v c1 c2) = App (Lam (desugarVar v) (desugarExp c2)) (App fixExp (Lam (desugarVar v) (desugarExp c1))) 
 
 
 -- >>> desugarExp (CApp (CLam (Var "x") (CX (Var "y"))) (CX (Var "z"))) 
@@ -52,7 +51,9 @@ desugarExp (Let (Var a) b c) = App ( Lam (IndexedVar a 0) (X (makeIndexedVar (de
 -- App (Lam (IndexedVar {ivName = "y", ivCount = 0}) (X (IndexedVar {ivName = "z", ivCount = 0}))) (App (X (IndexedVar {ivName = "fix", ivCount = 0})) (Lam (IndexedVar {ivName = "y", ivCount = 0}) (X (IndexedVar {ivName = "x", ivCount = 0}))))
 
 sugarExp :: Exp -> ComplexExp
-sugarExp = undefined
+sugarExp (X v) = CX (sugarVar v)
+sugarExp (Lam v c) = CLam (sugarVar v) (sugarExp c)
+sugarExp (App c1 c2) = CApp (sugarExp c1) (sugarExp c2)
 
 -- >>> sugarExp (App (X (IndexedVar "x" 0)) (X (IndexedVar "y" 1)))
 -- CApp (CX (Var {getVar = "x"})) (CX (Var {getVar = "y_1"}))
